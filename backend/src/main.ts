@@ -1,0 +1,20 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
+import { initDb } from './database/init-db';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+  const port = configService.get('port');
+  await app.listen(port);
+}
+
+async function startApp() {
+  await initDb();
+  bootstrap().then(() => {
+    console.log('App started');
+  });
+}
+
+startApp();
